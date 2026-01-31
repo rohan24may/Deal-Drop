@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { LogIn } from 'lucide-react'
+import AuthButton from '@/components/AuthButton'
 import Image from 'next/image'
 import { Bell, Rabbit, Shield } from 'lucide-react'
 import AddProductForm from '@/components/AddProductForm'
+
 
 const Page = () => {
   const user = null;
@@ -41,11 +41,9 @@ const Page = () => {
               className="h-10 w-auto"
             />
           </div>
-
-          <Button variant="default" size="sm" className='bg-orange-500 hover:bg-orange-600 gap-2'>
-            <LogIn className="h-4 w-4" /> Sign In
-          </Button>
-        </div>
+          
+          <AuthButton user={user}/>
+      </div>
       </header>
 
       <section className="py-20 px-4">
