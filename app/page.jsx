@@ -27,6 +27,7 @@ const Page = () => {
       description: "Get notified instantly when prices drop below your target",
     },
   ];
+  console.log("Page rendered");
 
   return (
     <main className='min-h-screen bg-linear-to-br from-orange-50 via-white to-orange-50'>
@@ -83,7 +84,9 @@ const Page = () => {
         </div>
       </section>
     </main>
+    
   )
 }
+
 
 export default Page
