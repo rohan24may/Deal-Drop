@@ -1,30 +1,32 @@
 # 💸 DealDrop — Smart Product Price Tracker
 
-DealDrop is a modern web app that lets users paste product URLs from e-commerce sites and track prices in a clean, user-friendly interface.  
-The goal is to make price tracking simple, fast, and accessible with a polished UI and scalable architecture.
+DealDrop is a modern web application that allows users to track product prices from e-commerce websites and get notified when prices change.  
+It focuses on clean UI, scalable architecture, and real-world full-stack practices.
 
-Built with **Next.js**, **Tailwind CSS**, and reusable UI components.
+Built with **Next.js App Router**, **Supabase**, and **Tailwind CSS**.
 
 ---
 
-## 🎯 Features
+## ✨ Features
 
-- 🔎 Track product URLs from e-commerce sites  
-- ⚡ Fast product input form with validation  
-- 🎨 Clean modern landing page design  
-- 📱 Fully responsive layout  
-- 🧩 Component-based UI architecture  
-- 🚀 Optimized Next.js App Router setup  
+- 🔎 Add and track product URLs
+- 🔐 Authentication with Supabase
+- ⚡ Server Actions for secure mutations
+- 🗂️ Price history storage (Supabase DB)
+- 🎨 Clean, responsive landing page UI
+- 🧩 Modular component architecture
+- 🚀 Optimized Next.js App Router setup
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Next.js** — React framework with App Router  
-- **React** — Component-based UI  
-- **Tailwind CSS** — Utility-first styling  
-- **shadcn/ui** — UI components  
-- **Lucide Icons** — Icon system  
+- **Next.js** — App Router, Server Actions
+- **React** — Component-based UI
+- **Supabase** — Authentication & Database
+- **Tailwind CSS** — Styling
+- **shadcn/ui** — UI components
+- **Lucide Icons** — Icons
 
 ---
 
@@ -32,14 +34,40 @@ Built with **Next.js**, **Tailwind CSS**, and reusable UI components.
 
 ```
 app/
+  auth/
+    callback/
+      route.js          # Supabase auth callback
+  actions.js            # Server actions (auth, product logic)
+  globals.css           # Global styles
+  layout.js             # Root layout
   page.jsx              # Landing page
 
 components/
   AddProductForm.jsx    # Product URL input form
-  ui/                   # Button, Input components
+  AuthButton.jsx        # Sign in / Sign out logic
+  AuthModal.jsx         # Authentication modal
+  ui/                   # shadcn/ui components
+    alert.jsx
+    badge.jsx
+    button.jsx
+    card.jsx
+    dialog.jsx
+    input.jsx
+    sonner.jsx
+
+utils/
+  supabase/
+    client.js           # Browser Supabase client
+    server.js           # Server Supabase client
+    middleware.js       # Auth session refresh
 
 public/
   deal-drop-logo.png
+
+middleware.js           # Next.js middleware
+next.config.js
+package.json
+README.md
 ```
 
 ---
@@ -49,8 +77,8 @@ public/
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/dealdrop.git
-cd dealdrop
+git clone https://github.com/YOUR_USERNAME/Deal-Drop.git
+cd Deal-Drop
 ```
 
 ### 2️⃣ Install dependencies
@@ -59,13 +87,22 @@ cd dealdrop
 npm install
 ```
 
-### 3️⃣ Run development server
+### 3️⃣ Configure environment variables
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+### 4️⃣ Run development server
 
 ```bash
 npm run dev
 ```
 
-Open your browser:
+Open:
 
 ```
 http://localhost:3000
@@ -73,31 +110,44 @@ http://localhost:3000
 
 ---
 
+## 🔐 Authentication Flow
+
+- User signs in via Supabase
+- Session is refreshed using middleware
+- Server Components receive authenticated user
+- UI switches between **Sign In / Sign Out** automatically
+
+---
+
 ## 🧪 Current Status
 
-- ✅ Landing page complete  
-- ✅ Product tracking form UI complete  
-- 🔄 Backend price scraping — planned  
-- 🔔 Alert system — planned  
-- 👤 Authentication — planned  
+- ✅ Authentication working
+- ✅ Product add & update logic
+- ✅ Price history table support
+- 🔄 Product scraping logic (in progress)
+- 🔔 Price alerts (planned)
+- 📊 Dashboard view (planned)
 
 ---
 
 ## 🗺 Roadmap
 
-- Product data extraction  
-- Price history tracking  
-- Alert notifications  
-- User accounts  
-- Dashboard view  
-- Watchlist system  
+- Product scraping service
+- Price change alerts
+- User dashboard
+- Watchlist management
+- Deployment to production
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome.  
-For major changes, please open an issue first to discuss what you’d like to add.
+Contributions are welcome.
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit your changes
+4. Open a pull request
 
 ---
 
