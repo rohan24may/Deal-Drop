@@ -15,26 +15,31 @@ const AddProductForm = ({user}) => {
     const [loading, setLoading] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
 
-    const handleSubmit = async (e) => {
-      e.preventDefault()  ;
-      if(!user){
-        setShowAuthModal(true);
-        return;
-      }
-      setLoading(true);
+   const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      const formData = new FormData();
-      formData.append('url', url);
+  if (!user) {
+    setShowAuthModal(true);
+    return;
+  }
 
-      const result = await addProduct(formData);
+  setLoading(true);
 
-      if(result.success){
-        toast.error(result.error);
-      }else{
-        toast.success(result.message || 'Product added successfully!');
-        setUrl('');
-      }
-    };
+  const formData = new FormData();
+  formData.append("url", url);
+
+  const result = await addProduct(formData);
+
+  if (!result.success) {
+    toast.error(result.error);
+  } else {
+    toast.success(result.message || "Product added successfully!");
+    setUrl("");
+  }
+
+  setLoading(false);
+};
+
 
 
  return (

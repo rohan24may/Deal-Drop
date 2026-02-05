@@ -31,13 +31,13 @@ export async function addProduct(formData) {
 
     const productData = await scrapeProduct(url);
 
-    if (!productData.productName || !productData.currentPrice) {
-      console.error(productData, "product data");
-      return {
-        error:
-          "Failed to extract product data. Please check the URL and try again.",
-      };
-    }
+    if (!productData.productName) {
+  console.error(productData, "product data");
+  return {
+    error:
+      "Failed to extract product data. Please check the URL and try again.",
+  };
+}
 
     const newPrice = parseFloat(productData.currentPrice);
     const currency = productData.currencyCode || "USD";

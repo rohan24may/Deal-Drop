@@ -3,6 +3,8 @@ import AddProductForm from "@/components/AddProductForm";
 import { TrendingDown, Shield, Bell, Rabbit } from "lucide-react";
 import AuthButton from "@/components/AuthButton";
 import Image from "next/image";
+import { getProducts } from "./actions";
+import ProductCard from "@/components/ProductCard";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -11,7 +13,7 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const products = [];
+  const products = user ? await getProducts() : [];
 
   const FEATURES = [
     {
@@ -33,9 +35,8 @@ export default async function Home() {
     },
   ];
 
-
   return (
-    <main className='min-h-screen bg-linear-to-br from-orange-50 via-white to-orange-50'>
+    <main className="min-h-screen bg-linear-to-br from-orange-50 via-white to-orange-50">
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -47,9 +48,9 @@ export default async function Home() {
               className="h-10 w-auto"
             />
           </div>
-          
-          <AuthButton user={user}/>
-      </div>
+
+          <AuthButton user={user} />
+        </div>
       </header>
 
       <section className="py-20 px-4">
@@ -69,7 +70,7 @@ export default async function Home() {
 
           <AddProductForm user={user} />
 
-           {products.length === 0 && (
+          {products.length === 0 && (
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-16">
               {FEATURES.map(({ icon: Icon, title, description }) => (
                 <div
@@ -85,9 +86,28 @@ export default async function Home() {
               ))}
             </div>
           )}
-
         </div>
       </section>
+
+      {user && products.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 pb-20">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-gray-900">
+              Your Tracked Products
+            </h3>
+            <span className="text-sm text-gray-500">
+              {products.length}{" "}
+              {products.length === 1 ? "product" : "products"}
+            </span>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 items-start">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {user && products.length === 0 && (
         <section className="max-w-2xl mx-auto px-4 pb-20 text-center">
@@ -103,9 +123,5 @@ export default async function Home() {
         </section>
       )}
     </main>
-    
-  )
+  );
 }
-
-
-
