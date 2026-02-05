@@ -1,5 +1,11 @@
 # 💸 DealDrop — Smart Product Price Tracker
 
+![DealDrop Banner](./public/deal-drop-logo.png)
+
+### 🎥 Demo
+![DealDrop Demo](./public/demo.gif)
+
+
 DealDrop is a full-stack web application that allows users to track product prices from e-commerce websites and monitor changes over time.  
 It is built with a focus on real-world architecture, clean UI, and scalable full-stack practices.
 
