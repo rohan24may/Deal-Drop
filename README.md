@@ -29,7 +29,6 @@ Built using **Next.js App Router**, **Supabase**, and **Tailwind CSS**.
 
 **Frontend**
 - Next.js (App Router)
-- React
 - Tailwind CSS
 - shadcn/ui
 - Lucide Icons

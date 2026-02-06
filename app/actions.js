@@ -1,16 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { scrapeProduct } from "@/lib/firecrawl";
-
-export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  revalidatePath("/");
-  redirect("/");
-}
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function addProduct(formData) {
   const url = formData.get("url");
@@ -26,23 +19,22 @@ export async function addProduct(formData) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return { error: "User not authenticated" };
+      return { error: "Not authenticated" };
     }
 
+    // Scrape product data with Firecrawl
     const productData = await scrapeProduct(url);
 
-    if (!productData.productName) {
-  console.error(productData, "product data");
-  return {
-    error:
-      "Failed to extract product data. Please check the URL and try again.",
-  };
-}
+    if (!productData.productName || !productData.currentPrice) {
+      console.log(productData, "productData");
+      return { error: "Could not extract product information from this URL" };
+    }
 
     const newPrice = parseFloat(productData.currentPrice);
     const currency = productData.currencyCode || "USD";
 
-    const { data: existingProduct, error: dbError } = await supabase
+    // Check if product exists to determine if it's an update
+    const { data: existingProduct } = await supabase
       .from("products")
       .select("id, current_price")
       .eq("user_id", user.id)
@@ -51,6 +43,7 @@ export async function addProduct(formData) {
 
     const isUpdate = !!existingProduct;
 
+    // Upsert product (insert or update based on user_id + url)
     const { data: product, error } = await supabase
       .from("products")
       .upsert(
@@ -64,8 +57,8 @@ export async function addProduct(formData) {
           updated_at: new Date().toISOString(),
         },
         {
-          onConflict: "user_id,url",
-          ignoreDuplicates: false,
+          onConflict: "user_id,url", // Unique constraint on user_id + url
+          ignoreDuplicates: false, // Always update if exists
         }
       )
       .select()
@@ -73,6 +66,7 @@ export async function addProduct(formData) {
 
     if (error) throw error;
 
+    // Add to price history if it's a new product OR price changed
     const shouldAddHistory =
       !isUpdate || existingProduct.current_price !== newPrice;
 
@@ -85,22 +79,19 @@ export async function addProduct(formData) {
     }
 
     revalidatePath("/");
-
     return {
       success: true,
       product,
       message: isUpdate
-        ? "Product updated with latest price"
-        : "Product added successfully",
+        ? "Product updated with latest price!"
+        : "Product added successfully!",
     };
   } catch (error) {
     console.error("Add product error:", error);
-    return {
-      error: error.message || "An error occurred while adding the product",
-    };
+    return { error: error.message || "Failed to add product" };
   }
 }
- 
+
 export async function deleteProduct(productId) {
   try {
     const supabase = await createClient();
@@ -116,7 +107,6 @@ export async function deleteProduct(productId) {
   } catch (error) {
     return { error: error.message };
   }
-
 }
 
 export async function getProducts() {
@@ -150,4 +140,11 @@ export async function getPriceHistory(productId) {
     console.error("Get price history error:", error);
     return [];
   }
+}
+
+export async function signOut() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  revalidatePath("/");
+  redirect("/");
 }

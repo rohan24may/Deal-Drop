@@ -1,41 +1,39 @@
 "use client";
 
-import Link from "next/link";
-import PriceChart from "./PriceChart";  
-import { toast } from "sonner";
-import { deleteProduct } from "@/app/actions";
 import { useState } from "react";
+import { deleteProduct } from "@/app/actions";
+import PriceChart from "./PriceChart";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";  
-import { Button } from "./ui/button";
-import { ChevronDown, ChevronUp, ExternalLink, Trash2,TrendingDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  ExternalLink,
+  Trash2,
+  TrendingDown,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import Link from "next/link";
 
-const ProductCard = ({ product }) => {
-    const [showChart, setShowChart] = useState(false);
-    const [deleting, setDeleting] = useState(false);
+export default function ProductCard({ product }) {
+  const [showChart, setShowChart] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-    const handleDelete = async () => {
-        if(!confirm("Remove this prouct from tracking?")) return;
+  const handleDelete = async () => {
+    if (!confirm("Remove this product from tracking?")) return;
 
-        setDeleting(true);
-       const result = await deleteProduct(product.id);
+    setDeleting(true);
+    await deleteProduct(product.id);
+  };
 
-       if(result.error){
-        toast.error(result.error);
-       } else {
-        toast.success(result.message || "Product deleted successfully!");
-         }
-         setDeleting(false);
-    };
-
-    return (
-    <Card className="hover:shadow-lg transition-shadow duration-300">
-         <CardHeader className="pb-3">
+  return (
+    <Card className="hover:shadow-lg transition-shadow">
+      <CardHeader className="pb-3">
         <div className="flex gap-4">
           {product.image_url && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -63,8 +61,9 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </CardHeader>
-        <CardContent>
-            <div className="flex flex-wrap gap-2">
+
+      <CardContent>
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -83,6 +82,7 @@ const ProductCard = ({ product }) => {
               </>
             )}
           </Button>
+
           <Button variant="outline" size="sm" asChild className="gap-1">
             <Link href={product.url} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4" />
@@ -90,7 +90,7 @@ const ProductCard = ({ product }) => {
             </Link>
           </Button>
 
-           <Button
+          <Button
             variant="ghost"
             size="sm"
             onClick={handleDelete}
@@ -100,16 +100,14 @@ const ProductCard = ({ product }) => {
             <Trash2 className="w-4 h-4" />
             Remove
           </Button>
+        </div>
+      </CardContent>
 
-          </div>
-        </CardContent>
-         {showChart && (
+      {showChart && (
         <CardFooter className="pt-0">
           <PriceChart productId={product.id} />
         </CardFooter>
       )}
     </Card>
-    );
-};
-
-export default ProductCard;
+  );
+}
