@@ -4,7 +4,6 @@ import { scrapeProduct } from "@/lib/firecrawl";
 import { sendPriceDropAlert } from "@/lib/email";
 
 
-const { NextResponse } = require("next/server")
 export async function GET() {
     return NextResponse.json({ message: "Checking prices..." });
 }
