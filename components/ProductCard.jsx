@@ -12,9 +12,8 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";  
-import { TrendingDown } from "lucide-react";
 import { Button } from "./ui/button";
-import { ChevronDown, ChevronUp, ExternalLink, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, Trash2,TrendingDown } from "lucide-react";
 
 const ProductCard = ({ product }) => {
     const [showChart, setShowChart] = useState(false);
@@ -30,23 +29,24 @@ const ProductCard = ({ product }) => {
         toast.error(result.error);
        } else {
         toast.success(result.message || "Product deleted successfully!");
-        setUrl("");
          }
          setDeleting(false);
     };
 
     return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
-        <CardHeader className={"pb-3"}>
-            <div className="flex gap-4">
-                {product.image_url && (
-                    <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-16 h-16 object-cover rounded"
-                    />
-                )}
-                <div className="flex-1 min-w-0">
+         <CardHeader className="pb-3">
+        <div className="flex gap-4">
+          {product.image_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.image_url}
+              alt={product.name}
+              className="w-20 h-20 object-cover rounded-md border"
+            />
+          )}
+
+          <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2">
               {product.name}
             </h3>
@@ -59,11 +59,10 @@ const ProductCard = ({ product }) => {
                 <TrendingDown className="w-3 h-3" />
                 Tracking
               </Badge>
-              </div>
-              </div>
             </div>
-
-        </CardHeader>
+          </div>
+        </div>
+      </CardHeader>
         <CardContent>
             <div className="flex flex-wrap gap-2">
           <Button
